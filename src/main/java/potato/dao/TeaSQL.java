@@ -94,9 +94,8 @@ public class TeaSQL implements TeaDAO {
         Tea tea = new Tea();
         tea.setId(rs.getInt("id"));
         tea.setName(rs.getString("name"));
-        tea.setTypeId(rs.getInt("type_id"));
+        tea.setType(rs.getString("type"));
         tea.setDescription(rs.getString("description"));
-        tea.setCountryOfOrigin(rs.getString("country_of_origin"));
 
         try {
             String flavorJson = rs.getString("flavor_profile");
@@ -105,16 +104,15 @@ public class TeaSQL implements TeaDAO {
             throw new SQLException("Error parsing flavor profile JSON", e);
         }
 
-        tea.setImageUrl(rs.getString("image_url"));
+        tea.setQuantity(rs.getInt("quantity"));
         return tea;
     }
 
     private void setTeaParameters(PreparedStatement stmt, Tea tea) throws SQLException {
         stmt.setString(1, tea.getName());
-        stmt.setInt(2, tea.getTypeId());
+        stmt.setString(2, tea.getType());
         stmt.setString(3, tea.getDescription());
-        stmt.setString(4, tea.getCountryOfOrigin());
         stmt.setString(5, tea.getFlavorProfileAsString()); // Используем строковое представление
-        stmt.setString(6, tea.getImageUrl());
+        stmt.setInt(6, tea.getQuantity());
     }
 }

@@ -5,11 +5,13 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
@@ -63,30 +65,8 @@
       <VBox spacing="10">
             <HBox alignment="CENTER" prefHeight="53.0" prefWidth="578.0">
                <children>
-                  <ToggleButton mnemonicParsing="false" text="ToggleButton">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </ToggleButton>
-                  <ToggleButton mnemonicParsing="false" text="ToggleButton">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </ToggleButton>
-                  <ToggleButton mnemonicParsing="false" text="ToggleButton">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </ToggleButton>
+                  <RadioButton fx:id="jsonRadio" mnemonicParsing="false" text="JSON" />
+                  <RadioButton fx:id="postgresRadio" mnemonicParsing="false" text="SQL" />
                </children>
             </HBox>
 
@@ -138,7 +118,16 @@
          <content>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0" />
+                  <HBox prefHeight="398.0" prefWidth="902.0">
+                     <children>
+                        <TableView fx:id="teaTable" prefHeight="398.0" prefWidth="519.0">
+                          <columns>
+
+
+
+                          </columns>
+                        </TableView>
+                     </children></HBox>
                </children>
             </HBox>
          </content>

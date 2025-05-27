@@ -10,15 +10,15 @@ public class RecommendationController {
         int time = 180; // seconds
 
         switch (tea.getType()) {
-            case "Зелёный":
+            case "зеленый":
                 temperature = 75;
                 time = 120;
                 break;
-            case "Чёрный":
+            case "черный":
                 temperature = 95;
                 time = 240;
                 break;
-            case "Улун":
+            case "улун":
                 temperature = 90;
                 time = 180;
                 break;
