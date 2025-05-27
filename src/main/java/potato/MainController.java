@@ -65,10 +65,10 @@ public class MainController {
     //Работа с базой
     @FXML
     private void initialize() {
-        TeaImporter teaImporter = new TeaImporter(new TeaSQL());
-        teaImporter.importFromJson("teas.json");
+//        TeaImporter teaImporter = new TeaImporter(new TeaSQL());
+//        teaImporter.importFromJson("teas.json");
         // Выбор источника данных по умолчанию
-        jsonRadio.setSelected(true);
+//        jsonRadio.setSelected(true);
         // Инициализация таблицы
 
         idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
@@ -86,7 +86,7 @@ public class MainController {
         teaTable.getColumns().add(quantityColumn);
 
 
-        switchToJson();
+        switchToPostgres();
 
         // Слушатели для переключения источников данных
         jsonRadio.selectedProperty().addListener((obs, oldVal, newVal) -> {

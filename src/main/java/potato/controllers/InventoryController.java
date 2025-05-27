@@ -2,7 +2,6 @@ package potato.controllers;
 
 
 import javafx.collections.ObservableList;
-import potato.Database;
 import potato.models.Tea;
 
 import java.sql.*;
