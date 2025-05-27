@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import potato.dao.TeaImporter;
 import potato.dao.TeaJSON;
 import potato.dao.TeaSQL;
 import potato.dao.TeaService;
@@ -32,7 +33,7 @@ public class MainController {
     @FXML private ComboBox<Tea> teaSelector;
     @FXML private CheckBox preferenceStronger;
     @FXML private Label recommendationResult;
-
+    @FXML private Button importSQL;
     @FXML private TableView<Tea> teaTable = new TableView<>();
     //Для нейронки лол
     @FXML private TextArea descriptionArea;
@@ -64,6 +65,8 @@ public class MainController {
     //Работа с базой
     @FXML
     private void initialize() {
+        TeaImporter teaImporter = new TeaImporter(new TeaSQL());
+        teaImporter.importFromJson("teas.json");
         // Выбор источника данных по умолчанию
         jsonRadio.setSelected(true);
         // Инициализация таблицы
@@ -158,9 +161,6 @@ public class MainController {
                         "Время заваривания: " + rec.get("time_seconds") + " сек."
         );
     }
-
-
-
 
     @FXML
     private void handleRefresh() {

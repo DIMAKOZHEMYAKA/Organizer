@@ -27,6 +27,8 @@ public class TeaSQL implements TeaDAO {
             while (rs.next()) {
                 teas.add(mapRowToTea(rs));
             }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
         return teas;
     }
@@ -40,15 +42,20 @@ public class TeaSQL implements TeaDAO {
 
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next() ? mapRowToTea(rs) : null;
+                if (rs.next()) {
+                    return mapRowToTea(rs);
+                } else {
+                    return null; // Чай с таким ID не найден
+                }
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
     @Override
     public void addTea(Tea tea) throws SQLException {
-        String sql = "INSERT INTO teas (name, type_id, description, country_of_origin, flavor_profile, image_url) " +
-                "VALUES (?, ?, ?, ?, ?::jsonb, ?)";
+        String sql = "INSERT INTO teas (name, type, description, flavor_profile, quantity) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -66,53 +73,39 @@ public class TeaSQL implements TeaDAO {
 
     @Override
     public void updateTea(Tea tea) throws SQLException {
-        String sql = "UPDATE teas SET name = ?, type_id = ?, description = ?, " +
-                "country_of_origin = ?, flavor_profile = ?::jsonb, image_url = ? WHERE id = ?";
+        String sql = "UPDATE teas SET name = ?, type = ?, description = ?, flavor_profile = ?, quantity = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             setTeaParameters(stmt, tea);
-            stmt.setInt(7, tea.getId());
+            stmt.setInt(6, tea.getId());
             stmt.executeUpdate();
         }
     }
 
     @Override
-    public void deleteTea(int id) throws SQLException {
-        String sql = "DELETE FROM teas WHERE id = ?";
+    public void deleteTea(int id) throws Exception {
 
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        }
-    }
-
-    private Tea mapRowToTea(ResultSet rs) throws SQLException {
-        Tea tea = new Tea();
-        tea.setId(rs.getInt("id"));
-        tea.setName(rs.getString("name"));
-        tea.setType(rs.getString("type"));
-        tea.setDescription(rs.getString("description"));
-
-        try {
-            String flavorJson = rs.getString("flavor_profile");
-            tea.setFlavorProfileFromString(flavorJson != null ? flavorJson : "{}");
-        } catch (JsonProcessingException e) {
-            throw new SQLException("Error parsing flavor profile JSON", e);
-        }
-
-        tea.setQuantity(rs.getInt("quantity"));
-        return tea;
     }
 
     private void setTeaParameters(PreparedStatement stmt, Tea tea) throws SQLException {
         stmt.setString(1, tea.getName());
         stmt.setString(2, tea.getType());
         stmt.setString(3, tea.getDescription());
-        stmt.setString(5, tea.getFlavorProfileAsString()); // Используем строковое представление
-        stmt.setInt(6, tea.getQuantity());
+        stmt.setString(4, tea.getFlavorProfileAsString());
+        stmt.setInt(5, tea.getQuantity());
     }
+
+    private Tea mapRowToTea(ResultSet rs) throws SQLException, JsonProcessingException {
+        Tea tea = new Tea();
+        tea.setId(rs.getInt("id"));
+        tea.setName(rs.getString("name"));
+        tea.setType(rs.getString("type"));
+        tea.setDescription(rs.getString("description"));
+        tea.setFlavorProfileFromString(rs.getString("flavor_profile"));
+        tea.setQuantity(rs.getInt("quantity"));
+        return tea;
+    }
+
 }
