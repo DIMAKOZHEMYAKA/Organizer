@@ -93,7 +93,7 @@ public class TeaSQL implements TeaDAO {
         stmt.setString(1, tea.getName());
         stmt.setString(2, tea.getType());
         stmt.setString(3, tea.getDescription());
-        stmt.setString(4, tea.getFlavorProfileAsString());
+        stmt.setString(4, tea.getFlavor_profile());
         stmt.setInt(5, tea.getQuantity());
     }
 
@@ -103,7 +103,7 @@ public class TeaSQL implements TeaDAO {
         tea.setName(rs.getString("name"));
         tea.setType(rs.getString("type"));
         tea.setDescription(rs.getString("description"));
-        tea.setFlavorProfileFromString(rs.getString("flavor_profile"));
+        tea.setFlavor_profile(rs.getString("flavor_profile"));
         tea.setQuantity(rs.getInt("quantity"));
         return tea;
     }

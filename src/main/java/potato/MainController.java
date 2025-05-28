@@ -2,15 +2,13 @@ package potato;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.util.Callback;
 import potato.dao.TeaImporter;
 import potato.dao.TeaJSON;
 import potato.dao.TeaSQL;
@@ -25,7 +23,6 @@ import java.sql.*;
 import java.util.*;
 
 public class MainController {
-    @FXML private TextField descriptionField;
     @FXML private Label typeResult;
     @FXML private TextField brewTimeField;
     @FXML private Label strengthResult;
@@ -35,20 +32,25 @@ public class MainController {
     @FXML private Label recommendationResult;
     @FXML private Button importSQL;
     @FXML private TableView<Tea> teaTable = new TableView<>();
-    //Для нейронки лол
-    @FXML private TextArea descriptionArea;
+
 
     @FXML private TextField nameField;
     @FXML private TextField typeField;
-    @FXML private TextField countryField;
+    @FXML private TextField descriptionField;
     @FXML private TextField flavorField;
-    @FXML private TextField imageUrlField;
     @FXML private TextField quantityField;
 
     @FXML private ToggleGroup dataSourceGroup;
     @FXML private RadioButton jsonRadio;
     @FXML private RadioButton postgresRadio;
     @FXML private RadioButton restRadio;
+
+    @FXML private TextField updateFieldName;
+    @FXML private TextField updateFieldType;
+    @FXML private TextField updateFieldDescription;
+    @FXML private TextField updateFieldFlavor;
+    @FXML private TextField updateFieldQuantity;
+
 
 // Таблица
     private TeaService teaService;
@@ -66,17 +68,17 @@ public class MainController {
     @FXML
     private void initialize() {
 //        TeaImporter teaImporter = new TeaImporter(new TeaSQL());
-//        teaImporter.importFromJson("teas.json");
-        // Выбор источника данных по умолчанию
+//        teaImporter.importFromJson("teaSQL.json");
+//         Выбор источника данных по умолчанию
 //        jsonRadio.setSelected(true);
-        // Инициализация таблицы
+//         Инициализация таблицы
 
         idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
 
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         typeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
         descriptionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
-        flavorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFlavorProfileAsString()));
+        flavorColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFlavor_profile()));
         quantityColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQuantity()).asObject());
 
         teaTable.getColumns().add(idColumn);
@@ -173,8 +175,8 @@ public class MainController {
             Tea tea = new Tea();
             tea.setName(nameField.getText());
             tea.setType((typeField.getText()));
-            tea.setDescription(descriptionArea.getText());
-            tea.setFlavorProfileFromString(flavorField.getText());
+            tea.setDescription(descriptionField.getText());
+            tea.setFlavor_profile(flavorField.getText());
             tea.setQuantity(Integer.parseInt(quantityField.getText()));
             teaService.addTea(tea);
             refreshTeaTable();
@@ -190,11 +192,11 @@ public class MainController {
 
         if (selectedTea != null) {
             try {
-                selectedTea.setName(nameField.getText());
-                selectedTea.setType(typeField.getText());
-                selectedTea.setDescription(descriptionArea.getText());
-                selectedTea.setFlavorProfileFromString(flavorField.getText());
-                selectedTea.setQuantity(Integer.parseInt(quantityField.getText()));
+                selectedTea.setName(updateFieldName.getText());
+                selectedTea.setType(updateFieldType.getText());
+                selectedTea.setDescription(updateFieldDescription.getText());
+                selectedTea.setFlavor_profile(updateFieldFlavor.getText());
+                selectedTea.setQuantity(Integer.parseInt(updateFieldQuantity.getText()));
                 teaService.updateTea(selectedTea);
                 refreshTeaTable();
             } catch (Exception e) {
@@ -217,15 +219,21 @@ public class MainController {
         }
     }
 
+    @FXML
+    private void onClickTableView(MouseEvent event){
+        updateFieldName.setText(teaTable.getSelectionModel().getSelectedItem().getName());
+        updateFieldType.setText(teaTable.getSelectionModel().getSelectedItem().getType());
+        updateFieldDescription.setText(teaTable.getSelectionModel().getSelectedItem().getDescription());
+        updateFieldFlavor.setText(teaTable.getSelectionModel().getSelectedItem().getFlavor_profile());
+        updateFieldQuantity.setText(String.valueOf(teaTable.getSelectionModel().getSelectedItem().getQuantity()));
+    }
 
 
     private void clearFields() {
         nameField.clear();
         typeField.clear();
-        descriptionArea.clear();
-        countryField.clear();
+        descriptionField.clear();
         flavorField.clear();
-        imageUrlField.clear();
     }
 
     private void showError(String title, String message) {

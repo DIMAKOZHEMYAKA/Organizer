@@ -1,10 +1,9 @@
 package potato.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tea {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -17,8 +16,10 @@ public class Tea {
 
     private String description;
 
-    @JsonProperty("flavor_profile")
-    private JsonNode flavorProfile;
+    private String flavorProfileAsString;
+
+//    @JsonProperty("flavor_profile")
+    private String flavor_profile;
 
     private int quantity;
 
@@ -42,24 +43,26 @@ public class Tea {
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public JsonNode getFlavorProfile() {
-        return flavorProfile;
+    public String getFlavor_profile() {
+        return flavor_profile;
+    }
+    public void setFlavor_profile(String flavor_profile) {
+        this.flavor_profile = flavor_profile;
     }
 
-    public void setFlavorProfile(JsonNode flavorProfile) {
-        this.flavorProfile = flavorProfile;
-    }
+
+
     // Парсер для JsonNode
-    public String getFlavorProfileAsString() {
-        try {
-            return flavorProfile != null ? objectMapper.writeValueAsString(flavorProfile) : "{}";
-        } catch (JsonProcessingException e) {
-            return "{}";
-        }
-    }
-    public void setFlavorProfileFromString(String json) throws JsonProcessingException {
-        this.flavorProfile = objectMapper.readTree(json);
-    }
+//    public String getFlavorProfileAsString() {
+//        try {
+//            return flavorProfile != null ? objectMapper.writeValueAsString(flavorProfile) : "{}";
+//        } catch (JsonProcessingException e) {
+//            return "{}";
+//        }
+//    }
+//    public void setFlavorProfileFromString(String json) throws JsonProcessingException {
+//        this.flavorProfile = objectMapper.readTree(json);
+//    }
     @Override
     public String toString(){
         return name;
