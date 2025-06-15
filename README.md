@@ -5,6 +5,7 @@
  - **Статус**:  1.0.
 
 **Скриншот рабочего окна приложения**:
+
 ![image](https://github.com/user-attachments/assets/c9dac796-04f5-4bab-b7c9-b560223a577d)
 
 ## Архитектура
