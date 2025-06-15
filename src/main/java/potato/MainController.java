@@ -9,10 +9,7 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import potato.dao.TeaImporter;
-import potato.dao.TeaJSON;
-import potato.dao.TeaSQL;
-import potato.dao.TeaService;
+import potato.dao.*;
 import potato.controllers.ClassificationController;
 import potato.controllers.InventoryController;
 import potato.controllers.RecommendationController;
@@ -60,9 +57,9 @@ public class MainController {
     @FXML private TableColumn<Tea, Integer> idColumn = new TableColumn<>("ID");
     @FXML private TableColumn<Tea, String> nameColumn = new TableColumn<>("Название");
     @FXML private TableColumn<Tea, String> typeColumn = new TableColumn<>("Тип");
-    @FXML private TableColumn<Tea, String> descriptionColumn = new TableColumn<>("Описание");;
-    @FXML private TableColumn<Tea, String> flavorColumn = new TableColumn<>("Вкус");;
-    @FXML private TableColumn<Tea, Integer> quantityColumn = new TableColumn<>("Количество");;
+    @FXML private TableColumn<Tea, String> descriptionColumn = new TableColumn<>("Описание");
+    @FXML private TableColumn<Tea, String> flavorColumn = new TableColumn<>("Вкус");
+    @FXML private TableColumn<Tea, Integer> quantityColumn = new TableColumn<>("Количество");
 
     //Работа с базой
     @FXML
@@ -70,7 +67,7 @@ public class MainController {
 //        TeaImporter teaImporter = new TeaImporter(new TeaSQL());
 //        teaImporter.importFromJson("teaSQL.json");
 //         Выбор источника данных по умолчанию
-//        jsonRadio.setSelected(true);
+//         jsonRadio.setSelected(true);
 //         Инициализация таблицы
 
         idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
@@ -98,6 +95,11 @@ public class MainController {
         postgresRadio.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) switchToPostgres();
         });
+
+        restRadio.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) switchToRest();
+        });
+
         // Загрузка данных
         refreshTeaTable();
     }
@@ -120,6 +122,11 @@ public class MainController {
 
     private void switchToPostgres() {
         teaService = new TeaService(new TeaSQL());
+        refreshTeaTable();
+    }
+
+    private void switchToRest() {
+        teaService = new TeaService(new TeaAPI());
         refreshTeaTable();
     }
 

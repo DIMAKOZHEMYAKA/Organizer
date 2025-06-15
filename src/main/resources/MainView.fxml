@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="427.0" prefWidth="899.0" spacing="10" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="potato.MainController">
+<VBox prefHeight="427.0" prefWidth="899.0" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="potato.MainController">
   <TabPane prefHeight="428.0" prefWidth="578.0">
     <!-- Tab: Классификация -->
     <Tab text="Классификация">
@@ -67,6 +67,7 @@
                <children>
                   <RadioButton fx:id="jsonRadio" mnemonicParsing="false" text="JSON" />
                   <RadioButton fx:id="postgresRadio" mnemonicParsing="false" text="SQL" />
+                  <RadioButton fx:id="restRadio" mnemonicParsing="false" text="REST API" />
                </children>
             </HBox>
 
